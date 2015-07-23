@@ -18,7 +18,10 @@ namespace Rabbit.WeiXin.Sample.Controllers
             if (signatureService.Check(signature, timestamp, nonce, "weixin"))
                 return echostr;
 
-            throw new Exception("非法请求。");
+#if !DEBUG
+                throw new Exception("非法请求。");
+#endif
+            return string.Empty;
         }
 
         [HttpPost]
@@ -27,7 +30,9 @@ namespace Rabbit.WeiXin.Sample.Controllers
             IHandlerBuilder builder = new HandlerBuilder();
 
             builder
-                //.Use<SignatureCheckHandlerMiddleware>() //验证签名中间件。
+#if !DEBUG
+                .Use<SignatureCheckHandlerMiddleware>() //验证签名中间件。
+#endif
                 .Use<CreateRequestMessageHandlerMiddleware>() //创建消息中间件（内置消息解密逻辑）。
                 .Use<SessionSupportHandlerMiddleware>() //会话支持中间件。
                 .Use<IgnoreRepeatMessageHandlerMiddleware>() //忽略重复的消息中间件。
