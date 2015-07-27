@@ -25,7 +25,7 @@ namespace Rabbit.WeiXin.Sample.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             IHandlerBuilder builder = new HandlerBuilder();
 
@@ -50,7 +50,7 @@ namespace Rabbit.WeiXin.Sample.Controllers
                     "weixin"));
 
             IWeiXinHandler weiXinHandler = new DefaultWeiXinHandler(builder);
-            weiXinHandler.Execute(context);
+            await weiXinHandler.Execute(context);
 
             return new WeiXinResult(context);
         }
